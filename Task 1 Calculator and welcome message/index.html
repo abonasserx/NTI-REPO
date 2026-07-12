@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <style>
+        button {
+            width: 100%;
+            align-items: center;
+        }
+    </style>
+</head>
+
+<body style="display: flex; justify-content: center;">
+    <main
+        style=" border: 1px solid  black; width: 70%; display: flex; flex-direction: column; align-items: center; background-color: antiquewhite;">
+        <h1>Caculator & Welcome Message| Task 1 && 2</h1>
+        <section
+            style=" padding-bottom: 15px; width: 50%; display: grid; grid-template-columns: repeat(2, 1fr); grid-template-rows: repeat(3, 1fr); gap: 20px;">
+
+
+            <button onclick=handleMath(event) clicked-data="+">+</button>
+            <button onclick=handleMath(event) clicked-data="-">-</button>
+            <button onclick=handleMath(event) clicked-data="/">/</button>
+            <button onclick=handleMath(event) clicked-data="*">*</button>
+            <button onclick=handleMath(event) clicked-data="^">^</button>
+            <button onclick=handleMath(event) clicked-data="%">%</button>
+
+            <span id="result">Result shows here</span>
+
+        </section>
+
+    </main>
+    <script src="app.js"></script>
+
+</body>
+
+</html>
