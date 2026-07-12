@@ -38,7 +38,7 @@ function handleMath (event) {
     }
 
     if(resultdoc) {
-        resultdoc.innerText = `Result is : ${result}`;
+        resultdoc.innerText = `Result ${num1 + ' ' + valueOfattr + ' ' + num2 } is : ${result}`;
     }else {
         resultdoc.innerText = `There is Error in input`;
     }
