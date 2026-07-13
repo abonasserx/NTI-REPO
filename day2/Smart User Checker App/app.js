@@ -6,7 +6,7 @@ var messageH3 = document.getElementById('message');
 
 
 
-/*================ Handling Employee Object =================*/
+/*================ Handling User Object =================*/
 
 var user = {};
 
