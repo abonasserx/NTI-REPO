@@ -27,7 +27,6 @@ const inputGender = document.createElement('select');
 const inputDepartment = document.createElement('select');
 
 
-
 const divBtn = document.createElement('div');
 const btnSumbit = document.createElement('button');
 const btnTable = document.createElement('button');
@@ -236,6 +235,7 @@ function save(list) {
 }
 
 // CRUD Functions
+let isUpdating = false
 
 function create (item) {
     let successAlertPopup = `
@@ -259,48 +259,26 @@ function delet (index){
     localStorage.setItem('tableData', JSON.stringify(users));
     reloadTable();
 }
-
+let userToUpdate = null;
 function editByIndex(index) {
-    let user = users[index];
-    backToForm();
-    inputFName.value = user.fname;
-    inputLName.value = user.lname;
-    inputAge.value = user.age;
-    inputGender.value = user.gender;
-    inputDepartment.value = user.department;
+    isUpdating = true;
+    btnSumbit.textContent = 'Update Person';
 
-    if(user.isGrad) {
+    userToUpdate = users[index];
+    backToForm();
+
+    inputFName.value = userToUpdate.fname;
+    inputLName.value = userToUpdate.lname;
+    inputAge.value = userToUpdate.age;
+    inputGender.value = userToUpdate.gender;
+    inputDepartment.value = userToUpdate.department;
+
+    if(userToUpdate.isGrad) {
         checkGrad.setAttribute("checked",null);
     }
 
-    btnSumbit.classList.add('hide');
-    const updateBtn = document.createElement('button');
-    updateBtn.textContent = "Update Person";
-
-    divBtn.appendChild(updateBtn);
-
-    updateBtn.addEventListener('click', ()=>{
-        if(!validationFunction()){
-            return;
-        }
-
-        users[index].fname = inputFName.value;
-        users[index].lname = inputLName.value;
-        users[index].age= inputAge.value;
-        users[index].gender= inputGender.value;
-        users[index].department= inputDepartment.value;
-        users[index].isGrad= checkGrad.value;
-        
-        localStorage.setItem('tableData', JSON.stringify(users));
-        
-        btnSumbit.classList.remove('hide');
-        divBtn.removeChild(updateBtn);
-    
-        goToTable();
-    });
-    
+    // btnSumbit.classList.add('hide');
 }
-
 
 
 
@@ -340,20 +318,41 @@ function validationFunction () {
     }
 }
 
-btnSumbit.addEventListener('click',(event) => {
-    if(errorMsg){
-        return;
-    }
 
-    if(validationFunction()){
-        create({fname:inputFName.value, lname:inputLName.value, age:inputAge.value, gender:inputGender.value , department:inputDepartment.value, isGrad:checkGrad.value});
+
+btnSumbit.addEventListener('click', ()=>{
+    if(!isUpdating) {
+        if(validationFunction()){
+            create({fname:inputFName.value, lname:inputLName.value, age:inputAge.value, gender:inputGender.value , department:inputDepartment.value, isGrad:checkGrad.value});
+        }else {
+            return;
+        }
+        
+        save(users); // saves in local storage
     }else {
-        return;
-    }
-    
-    save(users); // saves in local storage
-});
+            if(userToUpdate) {
+                btnSumbit.textContent = 'Update Person';
+                const index = users.indexOf(userToUpdate);
+                if(!validationFunction()){
+                    return;
+                }
 
+                users[index].fname = inputFName.value;
+                users[index].lname = inputLName.value;
+                users[index].age= inputAge.value;
+                users[index].gender= inputGender.value;
+                users[index].department= inputDepartment.value;
+                users[index].isGrad= checkGrad.value;
+                
+                localStorage.setItem('tableData', JSON.stringify(users));
+                
+                // btnSumbit.classList.remove('hide');
+                // divBtn.removeChild(updateBtn);
+                goToTable();
+                resetUpdateToAddPerson();
+            }
+    }
+});
 
 function errorHandling (msg) {
     let errorAlertPopup = `
@@ -512,6 +511,7 @@ function renderTable (list) {
     
 
     backBtn.addEventListener('click', ()=>{
+        resetUpdateToAddPerson();
         backToForm();
     });
 
@@ -527,4 +527,10 @@ function renderTable (list) {
 
     
     
+}
+
+function resetUpdateToAddPerson () {
+    isUpdating = false;
+    btnSumbit.textContent = 'Add Person';
+    userToUpdate = null;
 }
